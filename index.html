@@ -3,14 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
-    <title>Aithon · agregador de notícias</title>
+    <title>Aithon · agregador completo</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
+        * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
             background: #f5f3f0;
@@ -18,19 +13,20 @@
             line-height: 1.5;
             padding: 16px;
             min-height: 100vh;
+            transition: background 0.2s, color 0.2s;
         }
-
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
+        body.dark {
+            background: #1a1a1a;
+            color: #e0e0e0;
         }
-
-        /* Cabeçalho */
+        .container { max-width: 1200px; margin: 0 auto; }
         .header {
             text-align: center;
             margin-bottom: 40px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
-
         .header h1 {
             font-size: 3rem;
             font-weight: 700;
@@ -40,7 +36,11 @@
             background-clip: text;
             margin-bottom: 8px;
         }
-
+        body.dark .header h1 {
+            background: linear-gradient(145deg, #b87c4e, #e6b17e);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
         .header .sub {
             font-size: 1.2rem;
             color: #6b4f3a;
@@ -48,14 +48,56 @@
             padding-bottom: 12px;
             display: inline-block;
         }
-
-        /* Barra de busca */
+        body.dark .header .sub {
+            color: #b87c4e;
+            border-bottom-color: #4a3b2e;
+        }
+        .theme-toggle {
+            background: #e2d5ca;
+            border: none;
+            border-radius: 40px;
+            padding: 8px 20px;
+            margin-top: 10px;
+            cursor: pointer;
+            font-weight: 500;
+            color: #3b2a1e;
+            transition: 0.2s;
+        }
+        body.dark .theme-toggle {
+            background: #4a3b2e;
+            color: #e6b17e;
+        }
+        .tabs {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin: 20px 0 10px;
+        }
+        .tab-btn {
+            background: white;
+            border: 1.5px solid #d4c5b6;
+            border-radius: 40px;
+            padding: 10px 30px;
+            font-weight: 600;
+            color: #4a3b2e;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        body.dark .tab-btn {
+            background: #2a2a2a;
+            color: #e0e0e0;
+            border-color: #5a4a3a;
+        }
+        .tab-btn.active {
+            background: #b87c4e;
+            border-color: #b87c4e;
+            color: white;
+        }
         .search-box {
             max-width: 600px;
             margin: 0 auto 30px;
             padding: 0 10px;
         }
-
         .search-box input {
             width: 100%;
             padding: 16px 24px;
@@ -66,169 +108,190 @@
             transition: border 0.2s;
             outline: none;
         }
-
-        .search-box input:focus {
-            border-color: #b87c4e;
+        body.dark .search-box input {
+            background: #2a2a2a;
+            border-color: #5a4a3a;
+            color: #e0e0e0;
         }
-
-        /* Filtros por categoria */
+        .search-box input:focus { border-color: #b87c4e; }
         .filters {
             display: flex;
             flex-wrap: wrap;
             gap: 12px;
             justify-content: center;
-            margin-bottom: 32px;
+            margin-bottom: 20px;
             padding: 0 10px;
         }
-
         .filter-btn {
             background: white;
             border: 1.5px solid #d4c5b6;
             border-radius: 40px;
-            padding: 10px 24px;
-            font-size: 0.95rem;
+            padding: 8px 20px;
+            font-size: 0.9rem;
             font-weight: 500;
             color: #4a3b2e;
             cursor: pointer;
-            transition: all 0.2s;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+            transition: 0.2s;
         }
-
-        .filter-btn:hover {
-            background: #e2d5ca;
+        body.dark .filter-btn {
+            background: #2a2a2a;
+            color: #e0e0e0;
+            border-color: #5a4a3a;
         }
-
         .filter-btn.active {
             background: #b87c4e;
             border-color: #b87c4e;
             color: white;
         }
-
-        /* Grid de notícias */
+        .custom-feed {
+            max-width: 600px;
+            margin: 20px auto;
+            padding: 20px;
+            background: #e2d5ca;
+            border-radius: 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        body.dark .custom-feed {
+            background: #2a2a2a;
+        }
+        .custom-feed input {
+            padding: 12px;
+            border-radius: 30px;
+            border: 1px solid #b87c4e;
+            background: white;
+            font-size: 1rem;
+        }
+        body.dark .custom-feed input {
+            background: #1a1a1a;
+            color: #e0e0e0;
+        }
+        .custom-feed button {
+            background: #b87c4e;
+            color: white;
+            border: none;
+            border-radius: 30px;
+            padding: 10px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+        .custom-feeds-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 10px;
+        }
+        .feed-tag {
+            background: white;
+            padding: 4px 12px;
+            border-radius: 30px;
+            font-size: 0.8rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            border: 1px solid #b87c4e;
+        }
+        body.dark .feed-tag {
+            background: #3a3a3a;
+            color: #e0e0e0;
+        }
+        .feed-tag button {
+            background: none;
+            border: none;
+            color: #c44b4b;
+            font-weight: bold;
+            cursor: pointer;
+            font-size: 1rem;
+        }
         .news-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
             gap: 24px;
-            margin-bottom: 40px;
+            margin: 30px 0 20px;
         }
-
         .news-card {
             background: white;
             border-radius: 24px;
             padding: 24px;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
             border: 1px solid #ece2d9;
-            transition: transform 0.2s, box-shadow 0.2s;
+            transition: transform 0.2s;
             display: flex;
             flex-direction: column;
         }
-
-        .news-card:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.06);
+        body.dark .news-card {
+            background: #2a2a2a;
+            border-color: #4a4a4a;
         }
-
+        .news-card:hover { transform: translateY(-4px); }
         .news-card h3 {
             font-size: 1.3rem;
             margin-bottom: 12px;
             line-height: 1.4;
         }
-
         .news-card h3 a {
             color: #2c2c2c;
             text-decoration: none;
-            transition: color 0.2s;
         }
-
-        .news-card h3 a:hover {
-            color: #b87c4e;
-        }
-
+        body.dark .news-card h3 a { color: #e0e0e0; }
+        .news-card h3 a:hover { color: #b87c4e; }
         .news-description {
             color: #4a4a4a;
             font-size: 0.95rem;
-            line-height: 1.6;
             margin-bottom: 16px;
             flex: 1;
         }
-
+        body.dark .news-description { color: #b0b0b0; }
         .news-meta {
             display: flex;
             justify-content: space-between;
-            align-items: center;
             font-size: 0.85rem;
             color: #7a6b5c;
             border-top: 1px solid #ece2d9;
             padding-top: 16px;
-            margin-top: auto;
         }
-
-        .news-source {
+        body.dark .news-meta {
+            color: #a0a0a0;
+            border-top-color: #4a4a4a;
+        }
+        .news-source { font-weight: 600; color: #b87c4e; }
+        .load-more {
+            text-align: center;
+            margin: 20px 0 40px;
+        }
+        .load-more button {
+            background: #b87c4e;
+            color: white;
+            border: none;
+            border-radius: 40px;
+            padding: 12px 40px;
+            font-size: 1rem;
             font-weight: 600;
-            color: #b87c4e;
+            cursor: pointer;
         }
-
-        .news-date {
-            font-size: 0.8rem;
-        }
-
         .loading, .error, .no-results {
             text-align: center;
             padding: 60px 20px;
             grid-column: 1 / -1;
         }
-
-        .loading {
-            color: #9b8a7a;
-            font-style: italic;
-        }
-
-        .error {
-            color: #c44b4b;
-            background: #ffeeee;
-            border-radius: 16px;
-        }
-
-        .no-results {
-            color: #9b8a7a;
-            font-style: italic;
-            border: 2px dashed #d4c5b6;
-            border-radius: 32px;
-        }
-
         .footer {
             text-align: center;
-            margin-top: 60px;
+            margin-top: 40px;
             font-size: 0.85rem;
             color: #9b8a7a;
             border-top: 1px solid #ece2d9;
             padding-top: 24px;
         }
-
-        .footer a {
-            color: #6b4f3a;
-            text-decoration: none;
-            margin: 0 6px;
+        body.dark .footer {
+            color: #7a6b5c;
+            border-top-color: #4a4a4a;
         }
-
-        /* Responsividade */
+        .footer a { color: #6b4f3a; text-decoration: none; }
+        body.dark .footer a { color: #b87c4e; }
         @media (max-width: 600px) {
-            .header h1 {
-                font-size: 2.5rem;
-            }
-
-            .news-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .filters {
-                gap: 8px;
-            }
-
-            .filter-btn {
-                padding: 8px 16px;
-                font-size: 0.85rem;
-            }
+            .header h1 { font-size: 2.5rem; }
+            .news-grid { grid-template-columns: 1fr; }
         }
     </style>
 </head>
@@ -236,51 +299,259 @@
     <div class="container">
         <div class="header">
             <h1>AITHON</h1>
-            <div class="sub">agregador híbrido (RSS + NewsAPI)</div>
+            <div class="sub">agregador completo</div>
+            <button class="theme-toggle" id="themeToggle">🌓 Alternar tema</button>
         </div>
 
-        <!-- Campo de busca -->
-        <div class="search-box">
-            <input type="text" id="searchInput" placeholder="Buscar notícias..." autocomplete="off">
+        <!-- Abas: Destaques / Busca -->
+        <div class="tabs">
+            <button class="tab-btn active" id="tabHighlights">📰 Destaques</button>
+            <button class="tab-btn" id="tabSearch">🔍 Busca personalizada</button>
         </div>
 
-        <!-- Filtros de categoria -->
-        <div class="filters" id="filters">
+        <!-- Painel de busca personalizada (inicialmente oculto) -->
+        <div id="searchPanel" style="display: none;">
+            <div class="search-box">
+                <input type="text" id="customSearchInput" placeholder="Digite palavras-chave...">
+            </div>
+        </div>
+
+        <!-- Filtros de categoria (aparecem apenas na aba Destaques) -->
+        <div class="filters" id="categoryFilters">
             <button class="filter-btn active" data-category="all">Todas</button>
             <button class="filter-btn" data-category="tecnologia">Tecnologia</button>
             <button class="filter-btn" data-category="politica">Política</button>
             <button class="filter-btn" data-category="economia">Economia</button>
             <button class="filter-btn" data-category="ciencia">Ciência</button>
             <button class="filter-btn" data-category="saude">Saúde</button>
+            <button class="filter-btn" data-category="esportes">Esportes</button>
+            <button class="filter-btn" data-category="entretenimento">Entretenimento</button>
+        </div>
+
+        <!-- Área de feeds personalizados -->
+        <div class="custom-feed">
+            <input type="url" id="customFeedUrl" placeholder="https://exemplo.com/feed.xml">
+            <button id="addCustomFeed">Adicionar feed personalizado</button>
+            <div class="custom-feeds-list" id="customFeedsList"></div>
         </div>
 
         <!-- Grid de notícias -->
         <div class="news-grid" id="newsGrid">
-            <div class="loading">🦅 Buscando notícias (RSS + API)...</div>
+            <div class="loading">🦅 Carregando notícias...</div>
         </div>
 
-        <!-- Rodapé -->
+        <!-- Botão Carregar mais -->
+        <div class="load-more">
+            <button id="loadMoreBtn" style="display: none;">Carregar mais</button>
+        </div>
+
         <div class="footer">
-            <span>um projeto <a href="https://github.com/seuusuario/aithon">Aithon</a> · feeds próprios + NewsAPI · livre e gratuito</span>
+            <span>um projeto <a href="https://github.com/seuusuario/aithon">Aithon</a> · feeds + API · código aberto</span>
         </div>
     </div>
 
     <script>
         (function() {
-            // ---------- CONFIGURAÇÃO ----------
-            const NEWS_API_KEY = 'd693f7db314045809a4196b4eb556b3e'; // Sua chave inserida
+            // ---------- CONFIGURAÇÕES ----------
+            const NEWS_API_KEY = 'd693f7db314045809a4196b4eb556b3e'; // sua chave
+            const CACHE_DURATION = 30 * 60 * 1000; // 30 minutos em ms
+            const PAGE_SIZE = 20; // notícias por página
+            const PROXIES = [
+                'https://api.allorigins.win/raw?url=',
+                'https://corsproxy.io/?',
+                'https://thingproxy.freeboard.io/fetch/'
+            ];
 
-            // Categorias da NewsAPI (mapeamento)
-            const API_CATEGORIES = {
-                'tecnologia': 'technology',
-                'politica': 'general',    // general é o mais próximo
-                'economia': 'business',
-                'ciencia': 'science',
-                'saude': 'health'
+            // Categorias simuladas por palavras-chave (para classificar notícias da API geral)
+            const KEYWORD_CATEGORIES = {
+                tecnologia: ['tecnologia', 'tech', 'internet', 'software', 'hardware', 'ia', 'inteligência artificial', 'celular', 'app', 'digital', 'startup'],
+                politica: ['política', 'governo', 'presidente', 'congresso', 'senado', 'eleição', 'voto', 'partido', 'ministro', 'STF'],
+                economia: ['economia', 'bolsa', 'dólar', 'real', 'inflação', 'pib', 'juros', 'imposto', 'orçamento', 'financeiro'],
+                ciencia: ['ciência', 'pesquisa', 'estudo', 'cientista', 'laboratório', 'universidade', 'física', 'biologia', 'astronomia'],
+                saude: ['saúde', 'médico', 'hospital', 'vacina', 'doença', 'tratamento', 'covid', 'sus', 'bem-estar'],
+                esportes: ['esporte', 'futebol', 'time', 'jogador', 'campeonato', 'olimpíada', 'copa', 'basquete', 'vôlei'],
+                entretenimento: ['entretenimento', 'filme', 'série', 'música', 'artista', 'celebridade', 'show', 'cinema', 'famoso']
             };
 
-            // Feeds RSS (categorizados)
-            const RSS_FEEDS = [
+            // ---------- ESTADO GLOBAL ----------
+            let allNews = [];                // todas as notícias carregadas (originais)
+            let displayedNews = [];          // notícias após filtros/paginação
+            let currentPage = 1;
+            let currentCategory = 'all';
+            let currentSearchTerm = '';
+            let activeTab = 'highlights';    // 'highlights' ou 'search'
+            let customFeeds = [];             // URLs de feeds personalizados
+
+            // Elementos DOM
+            const newsGrid = document.getElementById('newsGrid');
+            const filterBtns = document.querySelectorAll('.filter-btn');
+            const loadMoreBtn = document.getElementById('loadMoreBtn');
+            const themeToggle = document.getElementById('themeToggle');
+            const tabHighlights = document.getElementById('tabHighlights');
+            const tabSearch = document.getElementById('tabSearch');
+            const searchPanel = document.getElementById('searchPanel');
+            const customSearchInput = document.getElementById('customSearchInput');
+            const customFeedUrl = document.getElementById('customFeedUrl');
+            const addCustomFeedBtn = document.getElementById('addCustomFeed');
+            const customFeedsList = document.getElementById('customFeedsList');
+
+            // ---------- FUNÇÕES AUXILIARES ----------
+            function saveState() {
+                localStorage.setItem('aithon_category', currentCategory);
+                localStorage.setItem('aithon_tab', activeTab);
+                localStorage.setItem('aithon_theme', document.body.classList.contains('dark') ? 'dark' : 'light');
+                localStorage.setItem('aithon_custom_feeds', JSON.stringify(customFeeds));
+            }
+
+            function loadState() {
+                const cat = localStorage.getItem('aithon_category');
+                if (cat) currentCategory = cat;
+                const tab = localStorage.getItem('aithon_tab');
+                if (tab) activeTab = tab;
+                const theme = localStorage.getItem('aithon_theme');
+                if (theme === 'dark') document.body.classList.add('dark');
+                const feeds = localStorage.getItem('aithon_custom_feeds');
+                if (feeds) customFeeds = JSON.parse(feeds);
+                renderCustomFeedsList();
+            }
+
+            // Atualiza botões de filtro ativos
+            function updateActiveFilter() {
+                filterBtns.forEach(btn => {
+                    if (btn.dataset.category === currentCategory) {
+                        btn.classList.add('active');
+                    } else {
+                        btn.classList.remove('active');
+                    }
+                });
+            }
+
+            // Abas
+            function setActiveTab(tab) {
+                activeTab = tab;
+                if (tab === 'highlights') {
+                    tabHighlights.classList.add('active');
+                    tabSearch.classList.remove('active');
+                    searchPanel.style.display = 'none';
+                    document.getElementById('categoryFilters').style.display = 'flex';
+                    currentSearchTerm = ''; // limpa busca personalizada
+                } else {
+                    tabSearch.classList.add('active');
+                    tabHighlights.classList.remove('active');
+                    searchPanel.style.display = 'block';
+                    document.getElementById('categoryFilters').style.display = 'none';
+                }
+                saveState();
+                applyFiltersAndRender();
+            }
+
+            // ---------- PROXY COM FALLBACK ----------
+            async function fetchWithProxy(url) {
+                for (const proxy of PROXIES) {
+                    try {
+                        const response = await fetch(proxy + encodeURIComponent(url), { 
+                            signal: AbortSignal.timeout(8000) 
+                        });
+                        if (response.ok) return await response.text();
+                    } catch (e) {
+                        console.warn(`Proxy ${proxy} falhou:`, e);
+                    }
+                }
+                throw new Error('Todos os proxies falharam');
+            }
+
+            // ---------- CACHE ----------
+            function getCached(key) {
+                const item = localStorage.getItem(key);
+                if (!item) return null;
+                const { timestamp, data } = JSON.parse(item);
+                if (Date.now() - timestamp > CACHE_DURATION) {
+                    localStorage.removeItem(key);
+                    return null;
+                }
+                return data;
+            }
+
+            function setCache(key, data) {
+                localStorage.setItem(key, JSON.stringify({ timestamp: Date.now(), data }));
+            }
+
+            // ---------- CLASSIFICAÇÃO POR CATEGORIA (palavras-chave) ----------
+            function inferCategory(title, description) {
+                const text = (title + ' ' + description).toLowerCase();
+                for (const [cat, keywords] of Object.entries(KEYWORD_CATEGORIES)) {
+                    for (const kw of keywords) {
+                        if (text.includes(kw)) return cat;
+                    }
+                }
+                return 'geral'; // fallback
+            }
+
+            // ---------- BUSCAR NEWSAPI (apenas geral) ----------
+            async function fetchFromAPI() {
+                if (!NEWS_API_KEY) return [];
+                const cacheKey = 'newsapi_general';
+                const cached = getCached(cacheKey);
+                if (cached) return cached;
+
+                try {
+                    const url = `https://newsapi.org/v2/top-headlines?country=br&apiKey=${NEWS_API_KEY}`;
+                    const response = await fetch(url);
+                    const data = await response.json();
+                    if (data.status !== 'ok') return [];
+
+                    const articles = data.articles.map(article => {
+                        const title = article.title || '';
+                        const description = article.description || '';
+                        const category = inferCategory(title, description);
+                        return {
+                            title,
+                            link: article.url || '#',
+                            description: description.substring(0, 200) + '...',
+                            date: article.publishedAt || new Date().toISOString(),
+                            source: article.source?.name || 'NewsAPI',
+                            category
+                        };
+                    });
+                    setCache(cacheKey, articles);
+                    return articles;
+                } catch (err) {
+                    console.warn('Erro na NewsAPI:', err);
+                    return [];
+                }
+            }
+
+            // ---------- BUSCAR FEED RSS ----------
+            async function fetchRSSFeed(feedUrl, feedName, forcedCategory = null) {
+                try {
+                    const xmlText = await fetchWithProxy(feedUrl);
+                    const parser = new DOMParser();
+                    const xmlDoc = parser.parseFromString(xmlText, 'text/xml');
+                    const items = xmlDoc.querySelectorAll('item');
+                    return Array.from(items).slice(0, 10).map(item => {
+                        const title = item.querySelector('title')?.textContent || 'Sem título';
+                        const link = item.querySelector('link')?.textContent || '#';
+                        const description = item.querySelector('description')?.textContent || '';
+                        const pubDate = item.querySelector('pubDate')?.textContent || '';
+                        const cleanDesc = description.replace(/<[^>]*>/g, '').substring(0, 200) + '...';
+                        const category = forcedCategory || inferCategory(title, cleanDesc);
+                        return {
+                            title,
+                            link,
+                            description: cleanDesc,
+                            date: pubDate,
+                            source: feedName,
+                            category
+                        };
+                    });
+                } catch (err) {
+                    console.warn(`Erro no feed ${feedName}:`, err);
+                    return [];
+                }
+            }
+
+            // Lista fixa de feeds RSS (já com categoria sugerida)
+            const FIXED_FEEDS = [
                 { name: 'G1 Tecnologia', url: 'https://g1.globo.com/rss/g1/tecnologia/', category: 'tecnologia' },
                 { name: 'G1 Política', url: 'https://g1.globo.com/rss/g1/politica/mensalao/', category: 'politica' },
                 { name: 'G1 Economia', url: 'https://g1.globo.com/rss/g1/economia/', category: 'economia' },
@@ -289,19 +560,102 @@
                 { name: 'Olhar Digital', url: 'https://olhardigital.com.br/feed/', category: 'tecnologia' },
                 { name: 'SciDev.Net', url: 'https://www.scidev.net/america-latina/feed/', category: 'ciencia' },
                 { name: 'InfoMoney', url: 'https://www.infomoney.com.br/feed/', category: 'economia' },
-                { name: 'Saúde', url: 'https://www.saudebrasil.saude.gov.br/rss/ultimas-noticias', category: 'saude' }
+                { name: 'Saúde', url: 'https://www.saudebrasil.saude.gov.br/rss/ultimas-noticias', category: 'saude' },
+                { name: 'Estadão', url: 'https://www.estadao.com.br/feed/', category: 'politica' },
+                { name: 'Folha', url: 'https://feeds.folha.uol.com.br/emcimadahora/rss.xml', category: 'geral' },
+                { name: 'O Globo', url: 'https://oglobo.globo.com/rss.xml', category: 'geral' },
+                { name: 'ESPN', url: 'https://www.espn.com.br/espn/rss/noticias', category: 'esportes' },
+                { name: 'Rolling Stone', url: 'https://rollingstone.uol.com.br/rss', category: 'entretenimento' }
             ];
 
-            const PROXY_URL = 'https://api.allorigins.win/raw?url='; // Para contornar CORS
-            const newsGrid = document.getElementById('newsGrid');
-            const filterButtons = document.querySelectorAll('.filter-btn');
-            const searchInput = document.getElementById('searchInput');
+            // Carregar todos os feeds (fixos + personalizados)
+            async function loadAllFeeds() {
+                const fixedPromises = FIXED_FEEDS.map(feed => 
+                    fetchRSSFeed(feed.url, feed.name, feed.category)
+                );
+                const customPromises = customFeeds.map(feed => 
+                    fetchRSSFeed(feed.url, feed.name, null) // categoria será inferida
+                );
+                const results = await Promise.all([...fixedPromises, ...customPromises]);
+                return results.flat();
+            }
 
-            let allNews = [];               // Todas as notícias carregadas
-            let currentCategory = 'all';
-            let currentSearchTerm = '';
+            // ---------- CARREGAR TUDO (API + RSS) ----------
+            async function loadAllNews() {
+                newsGrid.innerHTML = '<div class="loading">🦅 Buscando notícias...</div>';
+                try {
+                    const [apiNews, rssNews] = await Promise.all([
+                        fetchFromAPI(),
+                        loadAllFeeds()
+                    ]);
+                    const all = [...apiNews, ...rssNews];
+                    // Remover duplicatas (mesmo título e fonte)
+                    const seen = new Set();
+                    allNews = [];
+                    for (const item of all) {
+                        const key = `${item.title}|${item.source}`;
+                        if (!seen.has(key)) {
+                            seen.add(key);
+                            allNews.push(item);
+                        }
+                    }
+                    // Ordenar por data
+                    allNews.sort((a, b) => new Date(b.date) - new Date(a.date));
+                    applyFiltersAndRender();
+                } catch (err) {
+                    newsGrid.innerHTML = '<div class="error">Erro ao carregar notícias.</div>';
+                }
+            }
 
-            // ---------- FUNÇÕES AUXILIARES ----------
+            // ---------- FILTRAGEM E PAGINAÇÃO ----------
+            function applyFiltersAndRender() {
+                let filtered = allNews;
+
+                // Filtro por categoria (apenas na aba destaques)
+                if (activeTab === 'highlights' && currentCategory !== 'all') {
+                    filtered = filtered.filter(item => item.category === currentCategory);
+                }
+
+                // Filtro por termo de busca (para ambas as abas, mas na aba search usamos o campo específico)
+                let searchTerm = activeTab === 'search' ? currentSearchTerm : '';
+                if (searchTerm.trim() !== '') {
+                    const term = searchTerm.trim().toLowerCase();
+                    filtered = filtered.filter(item => 
+                        item.title.toLowerCase().includes(term) || 
+                        item.description.toLowerCase().includes(term)
+                    );
+                }
+
+                // Paginação: pegamos apenas até a página atual
+                displayedNews = filtered.slice(0, currentPage * PAGE_SIZE);
+                renderNews(displayedNews);
+
+                // Mostrar/esconder botão "Carregar mais"
+                if (filtered.length > displayedNews.length) {
+                    loadMoreBtn.style.display = 'inline-block';
+                } else {
+                    loadMoreBtn.style.display = 'none';
+                }
+            }
+
+            function renderNews(newsArray) {
+                if (newsArray.length === 0) {
+                    newsGrid.innerHTML = '<div class="no-results">📭 Nenhuma notícia encontrada.</div>';
+                    return;
+                }
+                const html = newsArray.map(item => `
+                    <div class="news-card">
+                        <h3><a href="${item.link}" target="_blank" rel="noopener">${escapeHtml(item.title)}</a></h3>
+                        <div class="news-description">${escapeHtml(item.description)}</div>
+                        <div class="news-meta">
+                            <span class="news-source">${escapeHtml(item.source)}</span>
+                            <span class="news-date">${formatDate(item.date)}</span>
+                        </div>
+                    </div>
+                `).join('');
+                newsGrid.innerHTML = html;
+            }
+
             function escapeHtml(text) {
                 const div = document.createElement('div');
                 div.textContent = text;
@@ -312,192 +666,85 @@
                 if (!dateString) return '';
                 try {
                     const date = new Date(dateString);
-                    return date.toLocaleDateString('pt-BR', {
-                        day: '2-digit', month: '2-digit', year: 'numeric',
-                        hour: '2-digit', minute: '2-digit'
-                    });
+                    return date.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit', year: 'numeric', hour:'2-digit', minute:'2-digit' });
                 } catch {
                     return dateString.substring(0, 10);
                 }
             }
 
-            // Mescla, remove duplicatas e ordena
-            function mergeAndSort(apiNews, rssNews) {
-                const all = [...apiNews, ...rssNews];
-                const seen = new Set();
-                const unique = [];
-                for (const item of all) {
-                    const key = `${item.title}|${item.source}`;
-                    if (!seen.has(key)) {
-                        seen.add(key);
-                        unique.push(item);
-                    }
-                }
-                return unique.sort((a, b) => new Date(b.date) - new Date(a.date));
-            }
-
-            // Filtra por categoria e termo de busca
-            function filterNews() {
-                let filtered = allNews;
-
-                // Filtro por categoria
-                if (currentCategory !== 'all') {
-                    filtered = filtered.filter(item => item.category === currentCategory);
-                }
-
-                // Filtro por termo de busca (título + descrição)
-                if (currentSearchTerm.trim() !== '') {
-                    const term = currentSearchTerm.trim().toLowerCase();
-                    filtered = filtered.filter(item =>
-                        item.title.toLowerCase().includes(term) ||
-                        item.description.toLowerCase().includes(term)
-                    );
-                }
-
-                return filtered;
-            }
-
-            // Renderiza os cards
-            function renderNews() {
-                const filtered = filterNews();
-
-                if (filtered.length === 0) {
-                    newsGrid.innerHTML = '<div class="no-results">📭 Nenhuma notícia encontrada com os filtros atuais.</div>';
-                    return;
-                }
-
-                const html = filtered.map(item => `
-                    <div class="news-card">
-                        <h3><a href="${item.link}" target="_blank" rel="noopener">${escapeHtml(item.title)}</a></h3>
-                        <div class="news-description">${escapeHtml(item.description)}</div>
-                        <div class="news-meta">
-                            <span class="news-source">${escapeHtml(item.source)}</span>
-                            <span class="news-date">${formatDate(item.date)}</span>
-                        </div>
-                    </div>
+            // ---------- FEEDS PERSONALIZADOS ----------
+            function renderCustomFeedsList() {
+                customFeedsList.innerHTML = customFeeds.map((feed, index) => `
+                    <span class="feed-tag">
+                        ${escapeHtml(feed.name)}
+                        <button onclick="removeCustomFeed(${index})">×</button>
+                    </span>
                 `).join('');
-
-                newsGrid.innerHTML = html;
             }
 
-            // ---------- BUSCAR DA NEWSAPI ----------
-            async function fetchFromAPI() {
-                if (!NEWS_API_KEY) {
-                    console.warn('API key não configurada.');
-                    return [];
-                }
+            window.removeCustomFeed = function(index) {
+                customFeeds.splice(index, 1);
+                saveState();
+                renderCustomFeedsList();
+                loadAllNews(); // recarrega notícias
+            };
 
-                const promises = Object.entries(API_CATEGORIES).map(async ([ourCat, apiCat]) => {
-                    const url = `https://newsapi.org/v2/top-headlines?country=br&category=${apiCat}&apiKey=${NEWS_API_KEY}`;
-                    try {
-                        const response = await fetch(url);
-                        const data = await response.json();
-                        if (data.status !== 'ok') return [];
-
-                        return data.articles.map(article => ({
-                            title: article.title || 'Sem título',
-                            link: article.url || '#',
-                            description: (article.description || '').substring(0, 150) + '...',
-                            date: article.publishedAt || new Date().toISOString(),
-                            source: article.source?.name || 'NewsAPI',
-                            category: ourCat
-                        }));
-                    } catch (err) {
-                        console.warn(`Erro na API para categoria ${apiCat}:`, err);
-                        return [];
-                    }
-                });
-
-                const results = await Promise.all(promises);
-                return results.flat();
-            }
-
-            // ---------- BUSCAR RSS ----------
-            async function fetchRSS(feed) {
-                try {
-                    const response = await fetch(PROXY_URL + encodeURIComponent(feed.url));
-                    if (!response.ok) throw new Error(`HTTP ${response.status}`);
-                    const xmlText = await response.text();
-                    const parser = new DOMParser();
-                    const xmlDoc = parser.parseFromString(xmlText, 'text/xml');
-                    const items = xmlDoc.querySelectorAll('item');
-                    return Array.from(items).slice(0, 5).map(item => {
-                        const title = item.querySelector('title')?.textContent || 'Sem título';
-                        const link = item.querySelector('link')?.textContent || '#';
-                        const description = item.querySelector('description')?.textContent || '';
-                        const pubDate = item.querySelector('pubDate')?.textContent || '';
-                        const cleanDesc = description.replace(/<[^>]*>/g, '').substring(0, 150) + '...';
-                        return {
-                            title,
-                            link,
-                            description: cleanDesc,
-                            date: pubDate,
-                            source: feed.name,
-                            category: feed.category
-                        };
-                    });
-                } catch (err) {
-                    console.warn(`Erro RSS ${feed.name}:`, err);
-                    return [];
-                }
-            }
-
-            async function fetchAllRSS() {
-                const promises = RSS_FEEDS.map(feed => fetchRSS(feed));
-                const results = await Promise.all(promises);
-                return results.flat();
-            }
-
-            // ---------- CARREGAR TUDO ----------
-            async function loadAllNews() {
-                newsGrid.innerHTML = '<div class="loading">🦅 Buscando notícias (RSS + API)...</div>';
-
-                try {
-                    const [apiNews, rssNews] = await Promise.all([
-                        fetchFromAPI(),
-                        fetchAllRSS()
-                    ]);
-
-                    allNews = mergeAndSort(apiNews, rssNews);
-
-                    if (allNews.length === 0) {
-                        newsGrid.innerHTML = '<div class="error">Nenhuma notícia encontrada.</div>';
-                        return;
-                    }
-
-                    renderNews();
-                } catch (err) {
-                    console.error('Erro geral:', err);
-                    newsGrid.innerHTML = '<div class="error">❌ Erro ao carregar notícias. Tente novamente.</div>';
-                }
-            }
+            addCustomFeedBtn.addEventListener('click', () => {
+                const url = customFeedUrl.value.trim();
+                if (!url) return;
+                // Extrair nome do feed (pode melhorar)
+                let name = new URL(url).hostname.replace('www.', '');
+                customFeeds.push({ name, url });
+                saveState();
+                renderCustomFeedsList();
+                customFeedUrl.value = '';
+                loadAllNews(); // recarrega notícias
+            });
 
             // ---------- EVENTOS ----------
-            // Filtros de categoria
-            filterButtons.forEach(btn => {
+            filterBtns.forEach(btn => {
                 btn.addEventListener('click', () => {
-                    filterButtons.forEach(b => b.classList.remove('active'));
-                    btn.classList.add('active');
                     currentCategory = btn.dataset.category;
-                    renderNews();
+                    updateActiveFilter();
+                    currentPage = 1;
+                    applyFiltersAndRender();
+                    saveState();
                 });
             });
 
-            // Busca com debounce simples
-            let searchTimeout;
-            searchInput.addEventListener('input', () => {
-                clearTimeout(searchTimeout);
-                searchTimeout = setTimeout(() => {
-                    currentSearchTerm = searchInput.value;
-                    renderNews();
-                }, 300); // aguarda 300ms após parar de digitar
+            loadMoreBtn.addEventListener('click', () => {
+                currentPage++;
+                applyFiltersAndRender();
             });
 
-            // Iniciar
+            themeToggle.addEventListener('click', () => {
+                document.body.classList.toggle('dark');
+                saveState();
+            });
+
+            tabHighlights.addEventListener('click', () => setActiveTab('highlights'));
+            tabSearch.addEventListener('click', () => setActiveTab('search'));
+
+            // Busca personalizada com debounce
+            let searchTimeout;
+            customSearchInput.addEventListener('input', () => {
+                clearTimeout(searchTimeout);
+                searchTimeout = setTimeout(() => {
+                    currentSearchTerm = customSearchInput.value;
+                    currentPage = 1;
+                    applyFiltersAndRender();
+                    saveState();
+                }, 300);
+            });
+
+            // Inicialização
+            loadState();
+            updateActiveFilter();
+            setActiveTab(activeTab);
             loadAllNews();
 
-            // Recarregar a cada 5 minutos (opcional)
-            setInterval(loadAllNews, 5 * 60 * 1000);
+            // Recarregar a cada 30 minutos (respeita cache)
+            setInterval(loadAllNews, 30 * 60 * 1000);
         })();
     </script>
 </body>
